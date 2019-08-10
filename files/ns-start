@@ -1,0 +1,17 @@
+#!/bin/bash
+
+#Checking for config files
+CONFIG=$(ls -A /etc/bareos)
+
+if [ "$CONFIG" = "" ];then
+	tar -xzvf /opt/bareos-etc-dir.tgz -C /
+fi
+
+
+#Fixing Bareos Permissions
+chown -R bareos.bareos /etc/bareos
+
+
+
+#Main Process
+exec /usr/sbin/bareos-sd -d 10 -f -g root -u root -c /etc/bareos
